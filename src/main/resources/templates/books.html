@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bookstore</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}" />
+</head>
+<body>
+	<section id="frontpage">
+		<h1>Bookstore</h1>
+		<p class="sub">Books for every taste</p>
+
+		<div class="books">
+			<div th:each="book : ${books}" class="book">
+				<div class="title" th:text="${book.title}"></div>
+				<div class="desc">
+					<p class="row">Author: <span th:text="${book.author}"></span></p>
+					<p class="row">Year: <span th:text="${book.publicationYear}"></span></p>
+					<p class="row">ISBN: <span th:text="${book.isbn}"></span></p>
+					<p class="row price">Price: <span th:text="${book.bookprice}"></span></p>
+				</div>
+				<div class="options">
+					<a th:href="@{/delete/{id}(id=${book.id})}">Delete
+						<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+					</a>
+					<a class="edit" th:href="@{/edit/{id}(id=${book.id})}">Edit
+						<svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="edit icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<a href="/add">Add Book to Bookstore</a>  
+
+	</section>  	
+</body>
+</html>
