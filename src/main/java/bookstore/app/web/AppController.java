@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import bookstore.app.domain.Book;
 import bookstore.app.domain.BookRepository;
+import bookstore.app.domain.CategoryRepository;
 
 @Controller
 public class AppController {
@@ -21,6 +22,9 @@ public class AppController {
 
     @Autowired
 	private BookRepository repository; 
+
+    @Autowired
+	private CategoryRepository drepository; 
 
     @RequestMapping(value= {"/", "/books"})
     public String books(Model model) {	
@@ -31,6 +35,7 @@ public class AppController {
     @RequestMapping(value = "/add")
     public String addBook(Model model){
     	model.addAttribute("book", new Book());
+        model.addAttribute("category", drepository.findAll());
         return "add";
     }   
 
@@ -39,6 +44,7 @@ public class AppController {
         Book book = repository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Invalid book Id:" + id));
         model.addAttribute("book", book);
+        model.addAttribute("category", drepository.findAll());
         return "edit";
     }    
     

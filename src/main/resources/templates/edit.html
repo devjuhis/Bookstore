@@ -32,6 +32,12 @@
                 <label for="price">Price</label>
                 <input class="input" type="number" id="price" th:field="*{bookprice}" />
                 <div style="clear: both; display: block; height: 10px;"></div>
+
+                <div style="clear: both; display: block; height: 10px;"></div>						
+                <label for="deplist">Category</label>
+                <select id="deplist" th:field="*{category}" class="form-control">
+                    <option th:each="category: ${category}" th:value="${category.categoryid}" th:text="${category.category}"></option>
+                </select>
             
                 <input class="input" type="submit" value="Save" />
             </form>

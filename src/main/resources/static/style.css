@@ -111,7 +111,7 @@ section {
             width: 90px;
         }
 
-        .input {
+        .input, select {
             box-sizing: border-box;
             border: 1px solid #d1cece;
             border-radius: 5px;
