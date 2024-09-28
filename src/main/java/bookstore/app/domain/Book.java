@@ -1,5 +1,7 @@
 package bookstore.app.domain;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -48,6 +50,7 @@ public class Book {
         return title;
     }
 
+     @PreAuthorize("hasAuthority('ADMIN')")
     public void setTitle(String title) {
         this.title = title;
     }
@@ -56,6 +59,7 @@ public class Book {
         return author;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void setAuthor(String author) {
         this.author = author;
     }
@@ -64,10 +68,12 @@ public class Book {
         return isbn;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public int getPublicationYear() {
         return publicationYear;
     }

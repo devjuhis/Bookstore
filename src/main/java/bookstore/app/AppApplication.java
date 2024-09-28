@@ -6,7 +6,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import bookstore.app.domain.AppUser;
+import bookstore.app.domain.AppUserRepository;
 import bookstore.app.domain.Book;
 import bookstore.app.domain.BookRepository;
 
@@ -23,7 +26,7 @@ public class AppApplication {
 	}
  
 	@Bean
-	public CommandLineRunner BookDemo(BookRepository repository, CategoryRepository drepository) {
+	public CommandLineRunner BookDemo(BookRepository repository, CategoryRepository drepository, AppUserRepository uRepository) {
 		return (args) -> {
 
 			Category category1 = new Category("SCIFI");
@@ -45,7 +48,19 @@ public class AppApplication {
 			repository.save(new Book("The Lord of the Rings", "J.R.R. Tolkien", "9780544003415", 1954, 25, category2));
 			repository.save(new Book("The Hobbit", "J.R.R. Tolkien", "9780547928227", 1937, 16, category1));
 
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+			// Hashataan salasanat
+			String hashedPassword1 = passwordEncoder.encode("asd");
+			String hashedPassword2 = passwordEncoder.encode("asd");
+
+			// Luodaan käyttäjät hashatuilla salasanoilla
+			AppUser user1 = new AppUser("user", hashedPassword1, "email@email.com", "USER");
+			AppUser user2 = new AppUser("admin", hashedPassword2, "test@email.com", "ADMIN");
+
+			// Tallennetaan käyttäjät tietokantaan
+			uRepository.save(user1);
+			uRepository.save(user2);
 			
 			log.info("fetch all books");
 			for (Book book : repository.findAll()) {

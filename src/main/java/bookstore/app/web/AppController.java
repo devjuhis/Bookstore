@@ -1,6 +1,8 @@
 package bookstore.app.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import bookstore.app.domain.Book;
 import bookstore.app.domain.BookRepository;
 import bookstore.app.domain.CategoryRepository;
+import bookstore.app.domain.BookService;
 
 @Controller
 public class AppController {
@@ -26,24 +29,37 @@ public class AppController {
     private static final Logger logger = LoggerFactory.getLogger(AppController.class);
 
     @Autowired
+    private BookService bookService;
+
+    @Autowired
 	private BookRepository repository; 
 
     @Autowired
 	private CategoryRepository drepository; 
 
+    @RequestMapping(value="/login")
+    public String login() {	
+        return "login";
+    }	
+
     @RequestMapping(value= {"/", "/books"})
     public String books(Model model) {	
         model.addAttribute("books", repository.findAll());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        logger.info("Authentication object: {}", authentication);
+        String username = authentication.getName();
+        model.addAttribute("username", username);
         return "books";
     }
 
-    // RESTful service to get all students
+    // RESTful service to get all books
     @RequestMapping(value="/restbooks", method = RequestMethod.GET)
     public @ResponseBody List<Book> bookListRest() {	
         return (List<Book>) repository.findAll();
     }
     
-    // RESTful service to get student by id
+    // RESTful service to get book by id
     @RequestMapping(value="/restbooks/{id}", method = RequestMethod.GET)
     public @ResponseBody Optional<Book> findStudentRest(@PathVariable("id") Long Id) {	
     	return repository.findById(Id);
@@ -72,11 +88,11 @@ public class AppController {
                     book.getId(), book.getTitle(), book.getAuthor(), book.getIsbn(), book.getPublicationYear(), book.getBookprice());
         
         if (book.getId() > 0 && repository.existsById(book.getId())) {
-            repository.save(book);
+            bookService.save(book);
             logger.info("Book updated successfully.");
         }
         else {
-            repository.save(book);
+            bookService.save(book);
             logger.info("New book saved successfully.");
         }
         return "redirect:/books";
@@ -84,7 +100,7 @@ public class AppController {
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteBook(@PathVariable("id") Long Id, Model model) {
-    	repository.deleteById(Id);
+    	bookService.deleteById(Id);
         return "redirect:../books";
     } 
 }
